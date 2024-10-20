@@ -1,42 +1,124 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #000;
+}
+
+.clock_content {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.clock_content h1 {
+  color: var(--white-color);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.clock_content h3 {
+  color: var(--primary-color);
+  font-weight: 300;
+  margin-bottom: 3rem;
+}
+
+.flip-clock {
+  --fcc-flip-duration: 0.5s;
+  /* transition duration when flip card */
+  --fcc-digit-block-width: 30px;
+  /* width of digit card */
+  --fcc-digit-block-height: 60px;
+  /* height of digit card, highly recommend in even number */
+  --fcc-digit-font-size: 30px;
+  /* font size of digit */
+  --fcc-digit-color: #000;
+  /* color of digit */
+  --fcc-label-font-size: 10px;
+  /* font size of label */
+  --fcc-label-color: var(--white-color);
+  /* color of label */
+  --fcc-background: var(--white-color);
+  /* background of digit card */
+  --fcc-divider-color: #000;
+  /* color of divider */
+  --fcc-divider-height: 1px;
+  /* height of divider */
+  --fcc-separator-size: 6px;
+  /* size of colon */
+  --fcc-separator-color: var(--white-color);
+  /* color of colon */
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.button {
+  width: 140px;
+  height: 45px;
+  font-size: 1rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #000;
+  background-color: var(--white-color);
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s ease 0s;
+  cursor: pointer;
+  outline: none;
+}
+
+.button:hover {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  transform: translateY(-7px);
+  box-shadow: 0 15px 20px rgba(46, 229, 157, 0.4);
+}
+
+@media (min-width: 900px) {
+  .clock_content h1 {
+    font-size: 5rem;
   }
-  to {
-    transform: rotate(360deg);
+
+  .clock_content h3 {
+    font-size: 1.5rem;
+  }
+
+  .flip-clock {
+    --fcc-digit-block-width: 80px;
+    --fcc-digit-block-height: 120px;
+    --fcc-digit-font-size: 60px;
+    --fcc-label-font-size: 20px;
   }
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.clock_content h6 {
+  color: var(--white-color);
+  font-size: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.socials {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+}
+.social-icon {
+  transition: transform 0.3s ease;
 }
 
-.card {
-  padding: 2em;
+.social-icon:hover {
+  transform: scale(1.2);
 }
-
-.read-the-docs {
-  color: #888;
+.disc {
+  color: #fff;
+  width: 960px;
+  font-size: larger;
+  margin-bottom: 25px;
+  font-weight: 400;
 }
