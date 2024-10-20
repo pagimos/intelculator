@@ -1,7 +1,7 @@
 import "./App.css";
 import FlipClockCountdown from "@leenguyen/react-flip-clock-countdown";
 import "@leenguyen/react-flip-clock-countdown/dist/index.css";
-import { Facebook, Instagram, Send, Linkedin, Twitter } from "lucide-react";
+import { Instagram } from "lucide-react";
 
 function App() {
   // Set a fixed end time for the countdown
