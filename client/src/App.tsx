@@ -5,7 +5,7 @@ import { Instagram } from "lucide-react";
 
 function App() {
   // Set a fixed end time for the countdown
-  const fixedEndTime: number = new Date("2024-12-01T00:00:00Z").getTime();
+  const fixedEndTime: number = new Date("2025-01-15T00:00:00Z").getTime();
 
   return (
     <>
