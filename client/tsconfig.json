@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "target": "ES2022",
     "lib": ["ES2023", "DOM"], // Ensure "DOM" is included here
     "module": "ESNext",
@@ -15,6 +19,5 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src"]
+  }
 }

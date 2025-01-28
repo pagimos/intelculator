@@ -2,7 +2,20 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Binance from "../assets/binance.png";
+import Adress from "../assets/adress.jfif";
 import Paypal from "../assets/paypal.png";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../components/ui/alert-dialog";
+
 const Donations: React.FC = () => {
   return (
     <div>
@@ -42,8 +55,31 @@ const Donations: React.FC = () => {
                 <img src={Paypal} alt="" className="w-6" />
                 Paypal
               </a>
+              <AlertDialog>
+                <AlertDialogTrigger className="bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg shadow-md hover:scale-105 transition duration-200 flex gap-2">
+                  <img src={Binance} alt="" className="w-6" />
+                  Binance
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-center">
+                      Support Science & Intelligence <br /> Donate to
+                      Intelculator!
+                    </AlertDialogTitle>
+                  </AlertDialogHeader>
+                  <img
+                    src={Adress}
+                    alt=""
+                    className="w-72 mx-auto rounded-lg"
+                  />
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>Done</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
 
-              <a
+              {/* <a
                 href="https://www.paypal.com/donate" // Replace with your donation link
                 target="_blank"
                 rel="noopener noreferrer"
@@ -51,7 +87,7 @@ const Donations: React.FC = () => {
               >
                 <img src={Binance} alt="" className="w-6" />
                 Binance
-              </a>
+              </a> */}
             </div>
           </div>
 
