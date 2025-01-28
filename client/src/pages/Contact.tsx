@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // If you are using React Router for navigation
-
+import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -31,22 +31,23 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className=" bg-blue-50">
       {/* Dynamic Navbar */}
       <Navbar />
 
       {/* Main Content */}
-      <main className="bg-blue-50 flex-grow flex flex-col items-center justify-center px-6 py-12 ">
-        <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">
-          Contact Us
-        </h1>
-        <p className="text-lg text-gray-600 mb-12 text-center">
-          Have questions or feedback? We'd love to hear from you!
-        </p>
-
+      <main className=" flex-grow flex flex-row-re items-center justify-evenly px-6 py-12  gap-12 max-w-7xl mx-auto">
+        <div className="flex flex-col">
+          <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">
+            Contact Us
+          </h1>
+          <p className="text-lg text-gray-600 mb-12 text-center">
+            Have questions or feedback? We'd love to hear from you!
+          </p>
+        </div>
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow-lg rounded-lg w-full max-w-lg p-8 space-y-6"
+          className="bg-white shadow-lg rounded-lg w-full max-w-lg p-8 space-y-4"
         >
           {/* Name Field */}
           <div>
@@ -139,9 +140,7 @@ const Contact: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-black w-full py-4 text-center text-white">
-        <p>© Intelculator 2024. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
