@@ -184,7 +184,7 @@ const Home: React.FC = () => {
         </div>
       </div>
       {/* Content Layer */}
-      <div className="bg-zinc-100 h-screen">
+      {/* <div className="bg-zinc-100 h-screen">
         <div className=" flex items-center max-w-5xl justify-between pb-24 mx-auto">
           <div className="flex flex-col gap-10 items-center mx-auto bg-yellow-400 p-2 rounded-xl pt-8">
             <div className="flex-col flex ">
@@ -233,7 +233,7 @@ const Home: React.FC = () => {
             className="w-[580px] py-24"
           />
         </div>
-      </div>
+      </div> */}
       <Footer />
     </div>
   );

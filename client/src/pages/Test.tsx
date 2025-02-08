@@ -3,7 +3,6 @@ import Navbar from "../components/Navbar";
 import supabase from "../config/supabaseClient";
 import countries from "../data/countries";
 
-// Timer Component
 const Timer = ({
   duration,
   onComplete,
@@ -33,23 +32,30 @@ const Timer = ({
   };
 
   return (
-    <div className="text-lg font-bold text-center bg-red-100 p-2 rounded-md shadow-md mb-4">
+    <div className="text-lg font-bold bg-red-100 p-2 rounded-md shadow-md absolute top-4 right-4">
       Time Left: {formatTime(timeLeft)}
     </div>
   );
 };
 
-// Form Component
 const Form = ({
   onSubmit,
 }: {
-  onSubmit: (data: { country: string }) => void;
+  onSubmit: (data: {
+    name: string;
+    age: string;
+    gender: string;
+    country: string;
+  }) => void;
 }) => {
+  const [name, setName] = useState("");
+  const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
   const [country, setCountry] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ country });
+    onSubmit({ name, age, gender, country });
   };
 
   return (
@@ -58,22 +64,31 @@ const Form = ({
       className="bg-white p-6 rounded-md shadow-md w-full max-w-md mx-auto mt-8"
     >
       <h1 className="text-2xl font-bold mb-4 text-center text-gray-700">
-        Start Your Test
+        Submit Your Details
       </h1>
       <label className="block mb-2 font-medium text-gray-600">Name</label>
       <input
         className="border p-2 rounded w-full mb-4"
         placeholder="Enter your full name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
         required
       />
       <label className="block mb-2 font-medium text-gray-600">Age</label>
       <input
         className="border p-2 rounded w-full mb-4"
         placeholder="Enter your age"
+        value={age}
+        onChange={(e) => setAge(e.target.value)}
         required
       />
       <label className="block mb-2 font-medium text-gray-600">Gender</label>
-      <select className="border p-2 rounded w-full mb-4" required>
+      <select
+        className="border p-2 rounded w-full mb-4"
+        value={gender}
+        onChange={(e) => setGender(e.target.value)}
+        required
+      >
         <option value="">Select your gender</option>
         <option>Male</option>
         <option>Female</option>
@@ -96,30 +111,33 @@ const Form = ({
         type="submit"
         className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
       >
-        Start Test
+        Submit
       </button>
     </form>
   );
 };
 
-// Test Component
 const Test = () => {
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<{
     [key: number]: string;
   }>({});
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [timeUp, setTimeUp] = useState(false);
-  const [testSubmitted, setTestSubmitted] = useState(false);
+  const [testFinished, setTestFinished] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [iqScore, setIqScore] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const { data, error } = await supabase.from("questions").select("*");
+      const { data, error } = await supabase
+        .from("questions")
+        .select("*")
+        .order("id", { ascending: true });
       if (error) {
         console.error("Error fetching questions:", error);
       } else {
+        console.log("Fetched Questions:", data); // Debugging line
         setQuestions(data);
       }
     };
@@ -151,7 +169,7 @@ const Test = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      handleSubmit();
+      setTestFinished(true);
     }
   };
 
@@ -163,9 +181,15 @@ const Test = () => {
 
   const handleTestComplete = () => {
     setTimeUp(true);
+    setTestFinished(true);
   };
 
-  const handleSubmit = () => {
+  const handleFormSubmit = (data: {
+    name: string;
+    age: string;
+    gender: string;
+    country: string;
+  }) => {
     const totalCorrectAnswers = questions.reduce(
       (correctCount, question, index) => {
         const correctOption = question.correct_option;
@@ -177,18 +201,49 @@ const Test = () => {
 
     const calculatedIQ = calculateIQ(totalCorrectAnswers, questions.length);
     setIqScore(calculatedIQ);
-    setTestSubmitted(true);
-  };
-
-  const handleFormSubmit = () => {
     setFormSubmitted(true);
   };
 
-  if (!formSubmitted) {
-    return <Form onSubmit={handleFormSubmit} />;
+  const ContentRenderer = ({
+    content,
+    size,
+  }: {
+    content: string;
+    size?: string;
+  }) => {
+    const isImage =
+      content?.startsWith("http://") || content?.startsWith("https://");
+
+    const imageUrl = isImage
+      ? content
+      : content?.startsWith("www.")
+      ? `https://${content}`
+      : content;
+
+    return isImage || content?.startsWith("www.") ? (
+      <img
+        src={imageUrl}
+        alt="Question"
+        className={`${size || "w-full h-auto"} object-contain`}
+      />
+    ) : (
+      <span
+        className="break-words"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
+  };
+
+  if (questions.length === 0) {
+    return <div>Loading questions...</div>;
   }
 
-  if (testSubmitted) {
+  const currentQuestion = questions[currentQuestionIndex] || {};
+  const questionText = currentQuestion.question_text || "";
+  const questionImageUrl = currentQuestion.image_url || "";
+  const questionOptions = currentQuestion.options || [];
+
+  if (formSubmitted) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-lg text-center">
@@ -203,44 +258,66 @@ const Test = () => {
     );
   }
 
-  if (questions.length === 0) {
-    return <div>Loading questions...</div>;
+  if (testFinished) {
+    return <Form onSubmit={handleFormSubmit} />;
   }
 
   return (
-    <div className="flex flex-col items-center justify-center mt-14">
-      <div className="bg-white shadow-md p-4 rounded-md w-full max-w-xl">
-        <Timer duration={600} onComplete={handleTestComplete} />
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100 relative">
+      <Timer duration={600} onComplete={handleTestComplete} />
 
+      <div className="bg-white shadow-md p-6 rounded-md w-full max-w-2xl">
         <div className="text-gray-600 text-sm font-medium mb-4 text-center">
           Question {currentQuestionIndex + 1} of {questions.length}
         </div>
 
-        <div className="min-h-[80px] mb-4 flex items-center justify-center">
-          <h2 className="text-xl font-bold text-gray-800 text-center leading-relaxed">
-            {questions[currentQuestionIndex]?.question_text}
-          </h2>
+        {/* Question Text or Image */}
+        {questionImageUrl ? (
+          <div className="flex justify-center mb-6">
+            <div className=" flex flex-col items-center justify-center  rounded-lg overflow-hidden">
+              <div className="w-[300px] h-[300px]">
+                <ContentRenderer content={questionImageUrl} />
+              </div>
+              <div className=" text-center mb-6 ">
+                <p className="text-xl font-medium text-gray-700 mt-10">
+                  {questionText}
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center mb-6">
+            <p className="text-xl font-medium text-gray-700">
+              <ContentRenderer content={questionText} />
+            </p>
+          </div>
+        )}
+
+        {/* Answer Options */}
+        <div
+          className={`grid ${
+            questionImageUrl ? "grid-cols-6" : "grid-cols-2"
+          } gap-2 justify-items-center`}
+        >
+          {questionOptions.map((option: string, index: number) => (
+            <button
+              key={index}
+              onClick={() => handleAnswerSelect(option)}
+              disabled={timeUp}
+              className={`flex items-center justify-center w-full h-24 rounded-md  text-center shadow-sm transition duration-300  ${
+                selectedAnswers[currentQuestionIndex] === option
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100  hover:bg-gray-200"
+              } ${timeUp ? "cursor-not-allowed bg-gray-300" : ""}`}
+            >
+              <div className="    flex items-center justify-center">
+                <ContentRenderer content={option} size="w-28 h-28" />
+              </div>
+            </button>
+          ))}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 justify-items-center">
-          {(questions[currentQuestionIndex]?.options?.options).map(
-            (option: string, index: number) => (
-              <button
-                key={index}
-                onClick={() => handleAnswerSelect(option)}
-                disabled={timeUp}
-                className={`flex items-center justify-center w-full h-24 rounded-md text-center shadow-sm transition duration-300 ${
-                  selectedAnswers[currentQuestionIndex] === option
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-100 hover:bg-gray-200"
-                } ${timeUp ? "cursor-not-allowed bg-gray-300" : ""}`}
-              >
-                {option}
-              </button>
-            )
-          )}
-        </div>
-
+        {/* Navigation Buttons */}
         <div className="flex justify-between mt-6">
           <button
             onClick={handlePreviousQuestion}
@@ -250,15 +327,11 @@ const Test = () => {
             Back
           </button>
           <button
-            onClick={
-              timeUp || currentQuestionIndex === questions.length - 1
-                ? handleSubmit
-                : handleNextQuestion
-            }
+            onClick={handleNextQuestion}
             className="py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
           >
-            {timeUp || currentQuestionIndex === questions.length - 1
-              ? "Submit"
+            {currentQuestionIndex === questions.length - 1
+              ? "Finish"
               : "Next Question"}
           </button>
         </div>
@@ -267,7 +340,6 @@ const Test = () => {
   );
 };
 
-// Main App Component
 const App = () => {
   return (
     <div>
