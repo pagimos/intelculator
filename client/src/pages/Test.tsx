@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import supabase from "../config/supabaseClient";
 import countries from "../data/countries";
 
+// Timer Component
 const Timer = ({
   duration,
   onComplete,
@@ -38,6 +39,7 @@ const Timer = ({
   );
 };
 
+// Form Component
 const Form = ({
   onSubmit,
 }: {
@@ -46,16 +48,16 @@ const Form = ({
     age: string;
     gender: string;
     country: string;
-  }) => void;
+  }) => Promise<void>;
 }) => {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [country, setCountry] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ name, age, gender, country });
+    await onSubmit({ name, age, gender, country });
   };
 
   return (
@@ -76,11 +78,14 @@ const Form = ({
       />
       <label className="block mb-2 font-medium text-gray-600">Age</label>
       <input
+        type="number"
         className="border p-2 rounded w-full mb-4"
         placeholder="Enter your age"
         value={age}
         onChange={(e) => setAge(e.target.value)}
         required
+        min="1"
+        max="120"
       />
       <label className="block mb-2 font-medium text-gray-600">Gender</label>
       <select
@@ -117,6 +122,7 @@ const Form = ({
   );
 };
 
+// Test Component
 const Test = () => {
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -137,7 +143,6 @@ const Test = () => {
       if (error) {
         console.error("Error fetching questions:", error);
       } else {
-        console.log("Fetched Questions:", data); // Debugging line
         setQuestions(data);
       }
     };
@@ -184,7 +189,7 @@ const Test = () => {
     setTestFinished(true);
   };
 
-  const handleFormSubmit = (data: {
+  const handleFormSubmit = async (data: {
     name: string;
     age: string;
     gender: string;
@@ -200,8 +205,27 @@ const Test = () => {
     );
 
     const calculatedIQ = calculateIQ(totalCorrectAnswers, questions.length);
-    setIqScore(calculatedIQ);
-    setFormSubmitted(true);
+
+    try {
+      const { error } = await supabase.from("results").insert([
+        {
+          name: data.name,
+          age: parseInt(data.age, 10),
+          gender: data.gender,
+          country: data.country,
+          iq_score: calculatedIQ,
+          created_at: new Date().toISOString(),
+        },
+      ]);
+
+      if (error) throw error;
+
+      setIqScore(calculatedIQ);
+      setFormSubmitted(true);
+    } catch (error) {
+      console.error("Error saving result:", error);
+      alert("Failed to save your result. Please try again.");
+    }
   };
 
   const ContentRenderer = ({
@@ -271,14 +295,13 @@ const Test = () => {
           Question {currentQuestionIndex + 1} of {questions.length}
         </div>
 
-        {/* Question Text or Image */}
         {questionImageUrl ? (
           <div className="flex justify-center mb-6">
-            <div className=" flex flex-col items-center justify-center  rounded-lg overflow-hidden">
+            <div className="flex flex-col items-center justify-center rounded-lg overflow-hidden">
               <div className="w-[300px] h-[300px]">
                 <ContentRenderer content={questionImageUrl} />
               </div>
-              <div className=" text-center mb-6 ">
+              <div className="text-center mb-6">
                 <p className="text-xl font-medium text-gray-700 mt-10">
                   {questionText}
                 </p>
@@ -293,7 +316,6 @@ const Test = () => {
           </div>
         )}
 
-        {/* Answer Options */}
         <div
           className={`grid ${
             questionImageUrl ? "grid-cols-6" : "grid-cols-2"
@@ -304,20 +326,19 @@ const Test = () => {
               key={index}
               onClick={() => handleAnswerSelect(option)}
               disabled={timeUp}
-              className={`flex items-center justify-center w-full h-24 rounded-md  text-center shadow-sm transition duration-300  ${
+              className={`flex items-center justify-center w-full h-24 rounded-md text-center shadow-sm transition duration-300 ${
                 selectedAnswers[currentQuestionIndex] === option
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-100  hover:bg-gray-200"
+                  : "bg-gray-100 hover:bg-gray-200"
               } ${timeUp ? "cursor-not-allowed bg-gray-300" : ""}`}
             >
-              <div className="    flex items-center justify-center">
+              <div className="flex items-center justify-center">
                 <ContentRenderer content={option} size="w-28 h-28" />
               </div>
             </button>
           ))}
         </div>
 
-        {/* Navigation Buttons */}
         <div className="flex justify-between mt-6">
           <button
             onClick={handlePreviousQuestion}
@@ -340,6 +361,7 @@ const Test = () => {
   );
 };
 
+// App Component
 const App = () => {
   return (
     <div>

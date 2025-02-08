@@ -1,59 +1,59 @@
-import React, { useState } from "react";
+import React from "react";
 import background from "../assets/bg.jpg";
 import wiq from "../assets/wiq.jpg";
 import Footer from "../components/Footer";
-import score from "../assets/score.png";
+
 import countries from "../assets/countries.jpg";
 import "../index.css";
-import { Calculator } from "lucide-react";
+
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 const Home: React.FC = () => {
-  const [iqScore, setIqScore] = useState<number | string>(""); // To store the IQ score
-  const [errorMessage, setErrorMessage] = useState<string>(""); // To store error message
-  const [percentile, setPercentile] = useState<number | string>(""); // To store IQ percentile
-  const [classification, setClassification] = useState<string>(""); // To store IQ classification
+  // const [iqScore, setIqScore] = useState<number | string>(""); // To store the IQ score
+  // const [errorMessage, setErrorMessage] = useState<string>(""); // To store error message
+  // const [percentile, setPercentile] = useState<number | string>(""); // To store IQ percentile
+  // const [classification, setClassification] = useState<string>(""); // To store IQ classification
 
-  const handleIqChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIqScore(e.target.value);
-    setErrorMessage(""); // Clear error message when user starts typing
-  };
+  // const handleIqChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setIqScore(e.target.value);
+  //   setErrorMessage(""); // Clear error message when user starts typing
+  // };
 
-  const handleCalculate = () => {
-    const iq = parseInt(iqScore.toString());
+  // const handleCalculate = () => {
+  //   const iq = parseInt(iqScore.toString());
 
-    // Validate IQ score
-    if (iq < 0 || iq > 200) {
-      setErrorMessage("Please enter a valid IQ score between 0 and 200.");
-      setPercentile("");
-      setClassification("");
-      return;
-    }
+  //   // Validate IQ score
+  //   if (iq < 0 || iq > 200) {
+  //     setErrorMessage("Please enter a valid IQ score between 0 and 200.");
+  //     setPercentile("");
+  //     setClassification("");
+  //     return;
+  //   }
 
-    // Calculate the percentile and classification based on the IQ score
-    const percentile = calculatePercentile(iq);
-    const classification = getClassification(iq);
+  //   // Calculate the percentile and classification based on the IQ score
+  //   const percentile = calculatePercentile(iq);
+  //   const classification = getClassification(iq);
 
-    setPercentile(percentile);
-    setClassification(classification);
-  };
+  //   setPercentile(percentile);
+  //   setClassification(classification);
+  // };
 
-  const calculatePercentile = (iq: number): number => {
-    // Simple logic to calculate percentile, you can refine this
-    if (iq < 70) return 2;
-    if (iq < 85) return 16;
-    if (iq < 115) return 50;
-    if (iq < 130) return 84;
-    return 98;
-  };
+  // const calculatePercentile = (iq: number): number => {
+  //   // Simple logic to calculate percentile, you can refine this
+  //   if (iq < 70) return 2;
+  //   if (iq < 85) return 16;
+  //   if (iq < 115) return 50;
+  //   if (iq < 130) return 84;
+  //   return 98;
+  // };
 
-  const getClassification = (iq: number): string => {
-    if (iq < 70) return "Intellectual Disability";
-    if (iq < 85) return "Below Average";
-    if (iq < 115) return "Average";
-    if (iq < 130) return "Above Average";
-    return "Gifted";
-  };
+  // const getClassification = (iq: number): string => {
+  //   if (iq < 70) return "Intellectual Disability";
+  //   if (iq < 85) return "Below Average";
+  //   if (iq < 115) return "Average";
+  //   if (iq < 130) return "Above Average";
+  //   return "Gifted";
+  // };
 
   return (
     <div className="">
