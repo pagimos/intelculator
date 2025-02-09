@@ -155,8 +155,8 @@ const Test = () => {
   }, []);
 
   const calculateIQ = (score: number, maxScore: number) => {
-    const minIQ = 55;
-    const maxIQ = 145;
+    const minIQ = 75;
+    const maxIQ = 125;
     return Math.round(minIQ + (score / maxScore) * (maxIQ - minIQ));
   };
 
