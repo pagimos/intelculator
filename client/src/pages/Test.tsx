@@ -35,6 +35,11 @@ const Timer = ({
   return (
     <div className="text-lg font-bold bg-red-100 p-2 rounded-md shadow-md absolute top-4 right-4">
       Time Left: {formatTime(timeLeft)}
+      {timeLeft === 0 && (
+        <div className="text-sm text-red-600 mt-1">
+          Time's up! Finish the test.
+        </div>
+      )}
     </div>
   );
 };
@@ -152,7 +157,7 @@ const Test = () => {
   const calculateIQ = (score: number, maxScore: number) => {
     const minIQ = 55;
     const maxIQ = 145;
-    return minIQ + (score / maxScore) * (maxIQ - minIQ);
+    return Math.round(minIQ + (score / maxScore) * (maxIQ - minIQ));
   };
 
   const handleAnswerSelect = (answer: string) => {
@@ -186,7 +191,6 @@ const Test = () => {
 
   const handleTestComplete = () => {
     setTimeUp(true);
-    setTestFinished(true);
   };
 
   const handleFormSubmit = async (data: {
@@ -289,7 +293,7 @@ const Test = () => {
     );
   }
 
-  if (testFinished) {
+  if (testFinished || timeUp) {
     return <Form onSubmit={handleFormSubmit} />;
   }
 
@@ -358,8 +362,8 @@ const Test = () => {
             onClick={handleNextQuestion}
             className="py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
           >
-            {currentQuestionIndex === questions.length - 1
-              ? "Finish"
+            {currentQuestionIndex === questions.length - 1 || timeUp
+              ? "Finish Test"
               : "Next Question"}
           </button>
         </div>
