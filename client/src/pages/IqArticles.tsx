@@ -1,7 +1,9 @@
 import React from "react";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-
+import whatis from "../assets/whatis.png";
+import society from "../assets/society.jpg";
+import iqtest from "../assets/iqtest.jpg";
 const IqArticles: React.FC = () => {
   return (
     <div>
@@ -16,15 +18,15 @@ const IqArticles: React.FC = () => {
             {/* Article Card 1 */}
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
               <img
-                src="/images/iq-basics.jpg"
+                src={whatis}
                 alt="IQ Basics"
-                className="w-full h-48 object-cover"
+                className="w-full h-48  object-cover"
               />
               <div className="p-4">
                 <h2 className="text-xl font-semibold mb-2">What is IQ?</h2>
                 <p className="text-sm text-gray-600 mb-4">
-                  Explore the fundamentals of IQ, its history, and what it
-                  really measures.
+                  Explore the core fundamentals of IQ, its rich history, and
+                  what it truly measures.
                 </p>
                 <a
                   href="/articles/what-is-iq"
@@ -38,7 +40,7 @@ const IqArticles: React.FC = () => {
             {/* Article Card 2 */}
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
               <img
-                src="/images/iq-tests.jpg"
+                src={iqtest}
                 alt="IQ Tests"
                 className="w-full h-48 object-cover"
               />
@@ -62,7 +64,7 @@ const IqArticles: React.FC = () => {
             {/* Article Card 3 */}
             <div className="bg-white shadow-md rounded-lg overflow-hidden">
               <img
-                src="/images/iq-society.jpg"
+                src={society}
                 alt="IQ in Society"
                 className="w-full h-48 object-cover"
               />
