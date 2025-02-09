@@ -11,14 +11,15 @@ const Navbar: React.FC = () => {
   return (
     <div className="bg-black w-full h-24 flex items-center justify-between px-32  overflow-hidden">
       {/* Logo Section */}
-      <div className="flex text-white text-4xl font-bold items-center gap-4 select-none">
-        <img src={white} alt="white-logo" className="w-16" />
-        <p>
-          <span className="text-orange-500">Intel</span>
-          Culator
-        </p>
-      </div>
-
+      <Link to="/">
+        <div className="flex text-white text-4xl font-bold items-center gap-4 select-none">
+          <img src={white} alt="white-logo" className="w-16" />
+          <p>
+            <span className="text-orange-500">Intel</span>
+            Culator
+          </p>
+        </div>
+      </Link>
       {/* Navigation Links */}
       <nav className="flex">
         {[
