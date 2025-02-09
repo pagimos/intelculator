@@ -149,7 +149,7 @@ const Test = () => {
     fetchQuestions();
   }, []);
 
-  const calculateIQ = (score: number, maxScore = 25) => {
+  const calculateIQ = (score: number, maxScore: number) => {
     const minIQ = 55;
     const maxIQ = 145;
     return minIQ + (score / maxScore) * (maxIQ - minIQ);
@@ -199,12 +199,19 @@ const Test = () => {
       (correctCount, question, index) => {
         const correctOption = question.correct_option;
         const userAnswer = selectedAnswers[index];
-        return userAnswer === correctOption ? correctCount + 1 : correctCount;
+        return userAnswer === correctOption
+          ? correctCount + question.difficulty
+          : correctCount;
       },
       0
     );
 
-    const calculatedIQ = calculateIQ(totalCorrectAnswers, questions.length);
+    const maxPossibleScore = questions.reduce(
+      (sum, question) => sum + question.difficulty,
+      0
+    );
+
+    const calculatedIQ = calculateIQ(totalCorrectAnswers, maxPossibleScore);
 
     try {
       const { error } = await supabase.from("results").insert([
